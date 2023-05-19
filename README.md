@@ -1,5 +1,5 @@
 # fullstack-application
-This is the demo springboot application for basic crud operation in MySQL database
+This is the demo application for basic crud operation using (Angular + SpringBoot + MySQL)
 
 ## Frontend Application
 I used <ins>**_Angular framework_**</ins> for frontend part <br/>
