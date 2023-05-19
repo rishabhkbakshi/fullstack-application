@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpCallsService } from '../services/http-calls.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -17,12 +17,14 @@ interface User {
 })
 export class UsersComponent implements OnInit {
 
+  @ViewChild('userFormRef', { static: true }) userFormRef: any;
+
   users: Array<User> = [];
 
   // variable for loader
   isLoading = false;
   userForm: FormGroup;
-  
+
   addUpdateUserBtn = 'Add';
   idToUpdateUser: any;
 
@@ -33,9 +35,9 @@ export class UsersComponent implements OnInit {
   ) {
     // form object with some validations
     this.userForm = this.formBuilder.group({
-      firstName: ['', Validators.compose([Validators.required])],
-      lastName: ['', Validators.compose([Validators.required])],
-      gender: ['select'],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      gender: ['select', [Validators.required]],
     });
   }
 
@@ -65,6 +67,11 @@ export class UsersComponent implements OnInit {
   }
 
   addUpdateUserAction(id?: string) {
+    if (this.userForm.get('gender')?.value === 'select') {
+      this.userForm.get('gender')?.setErrors({
+        required: true,
+      })
+    }
     if (this.userForm.valid) {
       if (!id) {
         this.isLoading = true;
@@ -81,7 +88,6 @@ export class UsersComponent implements OnInit {
       this.isLoading = false;
       this.users = res;
       this.toastr.success('User added successfully', 'Success');
-      this.clearForm();
     }).catch(() => {
       this.isLoading = false;
       this.toastr.error('Error in this operation', 'Error');
@@ -94,9 +100,7 @@ export class UsersComponent implements OnInit {
     this.httpService.updateUser(id, this.userForm.value).then((res) => {
       this.isLoading = false;
       this.toastr.success(`<b>User Id - ${id}</b> updated successfully`, 'Success');
-      this.userForm.reset();
       this.addUpdateUserBtn = 'Add';
-      this.clearForm();
     }).catch(() => {
       this.isLoading = false;
       this.toastr.error('Error in this operation', 'Error')
@@ -110,18 +114,19 @@ export class UsersComponent implements OnInit {
     this.httpService.deleteUser(id).then((res: any) => {
       this.isLoading = false;
       this.toastr.success(`<b>User Id - ${id}</b> deleted successfully`, 'Success');
-      this.clearForm();
     }).catch(() => {
       this.isLoading = false;
       this.toastr.error('Error in this operation', 'Error')
     }).then(() => {
       this.loadUsers();
-    })
+    });
+    this.clearForm();
   }
 
   clearForm() {
+    this.userFormRef.resetForm();
     this.userForm.reset();
-    this.userForm.get('gender')?.setValue('select');
     this.addUpdateUserBtn = 'Add';
+    this.userForm.get('gender')?.setValue('select')
   }
 }
