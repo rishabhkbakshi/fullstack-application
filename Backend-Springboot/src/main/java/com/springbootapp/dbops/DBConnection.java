@@ -22,17 +22,8 @@ public class DBConnection {
 		String password = prop.getProperty("password");
 		String className = prop.getProperty("className");
 
-		Connection conn = null;
-		try {
-			Class.forName(className);
-			conn = DriverManager.getConnection(conStr, uName, password);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (conn != null) {
-				conn.close();
-			}
-		}
+		Class.forName(className);
+		Connection conn = DriverManager.getConnection(conStr, uName, password);
 		return conn;
 	}
 
