@@ -22,8 +22,17 @@ public class DBConnection {
 		String password = prop.getProperty("password");
 		String className = prop.getProperty("className");
 
-		Class.forName(className);
-		Connection conn = DriverManager.getConnection(conStr, uName, password);
+		Connection conn = null;
+		try {
+			Class.forName(className);
+			conn = DriverManager.getConnection(conStr, uName, password);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
 		return conn;
 	}
 
@@ -46,7 +55,9 @@ public class DBConnection {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			conn.close();
+			if (conn != null) {
+				conn.close();
+			}
 		}
 		return lstDBUser;
 
@@ -60,12 +71,14 @@ public class DBConnection {
 		try {
 			conn = dbObj.getConnection();
 			stmt = (Statement) conn.createStatement();
-			stmt.executeUpdate("Insert into springboottable (firstname, lastname, gender)" + "values('" + firstName + "','"
-					+ lastName + "','" + gender + "')");
+			stmt.executeUpdate("Insert into springboottable (firstname, lastname, gender)" + "values('" + firstName
+					+ "','" + lastName + "','" + gender + "')");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			conn.close();
+			if (conn != null) {
+				conn.close();
+			}
 		}
 	}
 
@@ -85,7 +98,9 @@ public class DBConnection {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			conn.close();
+			if (conn != null) {
+				conn.close();
+			}
 		}
 	}
 
@@ -101,7 +116,9 @@ public class DBConnection {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			conn.close();
+			if (conn != null) {
+				conn.close();
+			}
 		}
 	}
 }

@@ -18,7 +18,9 @@ public class ReadPropertiesFile {
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		} finally {
-			fis.close();
+			if (fis != null) {
+				fis.close();
+			}
 		}
 		return prop;
 	}
