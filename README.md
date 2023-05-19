@@ -3,6 +3,7 @@ This is the demo springboot application for basic crud operation in MySQL databa
 
 ## Frontend Application
 I used <ins>**_Angular framework_**</ins> for frontend part <br/>
+- Version : <ins>Angular 11</ins>
 - Code Editor : <ins>Vscode</ins> <br/>
 - Language : <ins>Typescript, Bootstrap, HTML and CSS</ins><br/>
 
@@ -10,6 +11,7 @@ This is the path of frontend code :- <ins>[**https://github.com/rishabhkbakshi/f
 
 ## Backend Application
 I used <ins>**_Springboot framework_**</ins> for backend part <br/>
+- Version : <ins>Springboot 3.1.0</ins>
 - Code Editor : <ins>Eclipse</ins> <br/>
 - Language : <ins>Java</ins> <br/>
 - Database : <ins>MySQL</ins> <br/>
