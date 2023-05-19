@@ -5,7 +5,7 @@ The following was discovered as part of building this project:
 
 # Getting Started
 
-## Use this line for basic project setup [https://spring.io/quickstart](https://spring.io/quickstart)
+## Follow this link for basic project setup [https://spring.io/quickstart](https://spring.io/quickstart)
 
 ### Reference Documentation
 For further reference, please consider the following sections:
