@@ -80,6 +80,7 @@ export class UsersComponent implements OnInit {
         this.isLoading = true;
         this.updateUser(id);
       }
+      this.clearForm();
     }
   }
 
