@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpCallsService } from '../services/http-calls.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { DeleteUserConfirmationPopupComponent } from '../delete-user-confirmation-popup/delete-user-confirmation-popup.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface User {
   id: string,
@@ -31,7 +33,8 @@ export class UsersComponent implements OnInit {
   constructor(
     private httpService: HttpCallsService,
     private formBuilder: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog
   ) {
     // form object with some validations
     this.userForm = this.formBuilder.group({
@@ -111,17 +114,17 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(id: string) {
-    this.isLoading = true;
-    this.httpService.deleteUser(id).then((res: any) => {
-      this.isLoading = false;
-      this.toastr.success(`<b>User Id - ${id}</b> deleted successfully`, 'Success');
-    }).catch(() => {
-      this.isLoading = false;
-      this.toastr.error('Error in this operation', 'Error')
-    }).then(() => {
-      this.loadUsers();
+    let dialogRef = this.dialog.open(DeleteUserConfirmationPopupComponent, {
+      width: '250px',
+      disableClose: true,
+      data: { id }
     });
-    this.clearForm();
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result.actionCalled === 'Ok') {
+        this.loadUsers();
+      }
+      this.clearForm();
+    })
   }
 
   clearForm() {
