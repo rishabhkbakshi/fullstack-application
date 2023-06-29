@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpCallsService } from '../services/http-calls.service';
+import { HttpCallsService } from '../../services/http-calls.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { DeleteUserConfirmationPopupComponent } from '../delete-user-confirmation-popup/delete-user-confirmation-popup.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteUserConfirmationPopupComponent } from '../delete-user-confirmation-popup/delete-user-confirmation-popup.component';
 
 interface User {
   id: string,

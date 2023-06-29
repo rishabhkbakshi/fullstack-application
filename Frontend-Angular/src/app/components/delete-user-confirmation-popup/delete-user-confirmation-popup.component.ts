@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { HttpCallsService } from '../services/http-calls.service';
+import { HttpCallsService } from '../../services/http-calls.service';
 
 @Component({
   selector: 'app-delete-user-confirmation-popup',
