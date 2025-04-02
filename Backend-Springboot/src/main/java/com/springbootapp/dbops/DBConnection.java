@@ -1,5 +1,7 @@
 package com.springbootapp.dbops;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,15 +17,24 @@ public class DBConnection {
 
 	// Code to make a connection b/w java and mysql
 	private Connection getConnection() throws Exception {
-		Properties prop = ReadPropertiesFile.readPropertiesFile("./src/main/resources/application.properties");
+		Properties prop = new Properties();
+		Connection conn = null;
+		try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+			if (input == null) {
+				throw new FileNotFoundException("Property file 'application.properties' not found in the classpath");
+			}
+			prop.load(input);
+			String conStr = prop.getProperty("dbUrl") + prop.getProperty("dbName");
+			String uName = prop.getProperty("uName");
+			String password = prop.getProperty("password");
+			String className = prop.getProperty("className");
 
-		String conStr = prop.getProperty("dbUrl") + prop.getProperty("dbName");
-		String uName = prop.getProperty("uName");
-		String password = prop.getProperty("password");
-		String className = prop.getProperty("className");
+			Class.forName(className);
+			conn = DriverManager.getConnection(conStr, uName, password);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
-		Class.forName(className);
-		Connection conn = DriverManager.getConnection(conStr, uName, password);
 		return conn;
 	}
 
