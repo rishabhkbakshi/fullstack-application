@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import User from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class HttpCallsService {
 
   // get => select operation 
   getUsers() {
-    return this.http.get(`${this.apiUrl}users`, {
+    return this.http.get<User[]>(`${this.apiUrl}users`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -30,8 +31,8 @@ export class HttpCallsService {
   }
 
   // put => update operation 
-  updateUser(id: any, user: any) {
-    return this.http.put<any>(`${this.apiUrl}users/${id}`, user, {
+  updateUser(id: any, user: User) {
+    return this.http.put<User>(`${this.apiUrl}users/${id}`, user, {
       headers: {
         'Content-Type': 'application/json'
       }

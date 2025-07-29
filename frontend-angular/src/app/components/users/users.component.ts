@@ -4,13 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteUserConfirmationPopupComponent } from '../delete-user-confirmation-popup/delete-user-confirmation-popup.component';
-
-interface User {
-  id: string,
-  firstName: string,
-  lastName: string,
-  gender: string
-}
+import User from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-users',
@@ -22,13 +16,11 @@ export class UsersComponent implements OnInit {
   @ViewChild('userFormRef', { static: true }) userFormRef: any;
 
   users: Array<User> = [];
-
-  // variable for loader
   isLoading = false;
   userForm: FormGroup;
 
   addUpdateUserBtn = 'Add';
-  idToUpdateUser: any;
+  idToUpdateUser: string | null = null;
 
   constructor(
     private httpService: HttpCallsService,
@@ -36,7 +28,6 @@ export class UsersComponent implements OnInit {
     private toastr: ToastrService,
     private dialog: MatDialog
   ) {
-    // form object with some validations
     this.userForm = this.formBuilder.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
@@ -50,13 +41,14 @@ export class UsersComponent implements OnInit {
 
   loadUsers() {
     this.isLoading = true;
-    this.httpService.getUsers().then((res: any) => {
-      this.isLoading = false;
+    this.httpService.getUsers().then((res: User[]) => {
       this.users = res;
-    }, (err) => {
+    }).catch((err) => {
+      console.error('Error loading users:', err);
+      this.toastr.error('Failed to load users', 'Error');
+    }).finally(() => {
       this.isLoading = false;
-      console.log(err)
-    })
+    });
   }
 
   action(id: string, user?: User) {
@@ -69,48 +61,57 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  addUpdateUserAction(id?: string) {
+  addUpdateUserAction() {
     if (this.userForm.get('gender')?.value === 'select') {
       this.userForm.get('gender')?.setErrors({
         required: true,
-      })
+      });
     }
+
     if (this.userForm.valid) {
-      if (!id) {
-        this.isLoading = true;
+      this.isLoading = true;
+      if (!this.idToUpdateUser) {
         this.addUser();
       } else {
-        this.isLoading = true;
-        this.updateUser(id);
+        this.updateUser(this.idToUpdateUser);
       }
-      this.clearForm();
+    } else {
+      this.toastr.error('Please fill all required fields correctly.', 'Validation Error');
+      this.userForm.markAllAsTouched();
     }
   }
 
   addUser() {
-    this.httpService.addUser(this.userForm.value).then((res: any) => {
-      this.isLoading = false;
-      this.users = res;
+    this.httpService.addUser(this.userForm.value).then(() => {
+      this.users.push({
+        id: this.users[this.users.length - 1].id + 1,
+        ...this.userForm.value
+      }); // Add new user to the list
       this.toastr.success('User added successfully', 'Success');
+      this.clearForm();
     }).catch(() => {
+      this.toastr.error('Error adding user', 'Error');
+    }).finally(() => {
       this.isLoading = false;
-      this.toastr.error('Error in this operation', 'Error');
-    }).then(() => {
-      this.loadUsers();
-    })
+    });
   }
 
   updateUser(id: string) {
-    this.httpService.updateUser(id, this.userForm.value).then((res) => {
-      this.isLoading = false;
+    this.httpService.updateUser(id, this.userForm.value).then(() => {
       this.toastr.success(`<b>User Id - ${id}</b> updated successfully`, 'Success');
       this.addUpdateUserBtn = 'Add';
+
+      const index = this.users.findIndex(user => user.id === id);
+      if (index !== -1) {
+        this.users[index] = { id, ...this.userForm.value };
+      } // Update the user in the list
+      
+      this.clearForm();
     }).catch(() => {
+      this.toastr.error('Error updating user', 'Error');
+    }).finally(() => {
       this.isLoading = false;
-      this.toastr.error('Error in this operation', 'Error')
-    }).then(() => {
-      this.loadUsers();
-    })
+    });
   }
 
   deleteUser(id: string) {
@@ -120,17 +121,18 @@ export class UsersComponent implements OnInit {
       data: { id }
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      if (result.actionCalled === 'Ok') {
-        this.loadUsers();
+      if (result && result.actionCalled === 'Ok') {
+        this.users = this.users.filter(user => user.id !== id); // Remove user from the list
       }
       this.clearForm();
-    })
+    });
   }
 
   clearForm() {
     this.userFormRef.resetForm();
     this.userForm.reset();
     this.addUpdateUserBtn = 'Add';
-    this.userForm.get('gender')?.setValue('select')
+    this.idToUpdateUser = null;
+    this.userForm.get('gender')?.setValue('select');
   }
 }
