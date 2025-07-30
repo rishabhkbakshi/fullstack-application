@@ -83,16 +83,13 @@ export class UsersComponent implements OnInit {
 
   addUser() {
     this.httpService.addUser(this.userForm.value).then(() => {
-      this.users.push({
-        id: this.users[this.users.length - 1].id + 1,
-        ...this.userForm.value
-      }); // Add new user to the list
       this.toastr.success('User added successfully', 'Success');
       this.clearForm();
     }).catch(() => {
       this.toastr.error('Error adding user', 'Error');
     }).finally(() => {
       this.isLoading = false;
+      this.loadUsers()
     });
   }
 
@@ -105,7 +102,7 @@ export class UsersComponent implements OnInit {
       if (index !== -1) {
         this.users[index] = { id, ...this.userForm.value };
       } // Update the user in the list
-      
+
       this.clearForm();
     }).catch(() => {
       this.toastr.error('Error updating user', 'Error');
