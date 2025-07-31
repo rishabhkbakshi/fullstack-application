@@ -22,7 +22,7 @@ This is a demo full-stack CRUD application using **Angular**/**React** (Frontend
 - **How to run:**  
   1. Open a terminal in the `frontend-angular` folder.
   2. Run `npm install`
-  3. Run `ng serve`
+  3. Run `ng serve --o`
   4. Visit [http://localhost:4200](http://localhost:4200) in your browser.
 
 [View Angular code on GitHub](https://github.com/rishabhkbakshi/fullstack-application/tree/master/frontend-angular)
