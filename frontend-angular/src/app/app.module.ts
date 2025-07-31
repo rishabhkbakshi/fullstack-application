@@ -12,12 +12,14 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DeleteUserConfirmationPopupComponent } from './components/delete-user-confirmation-popup/delete-user-confirmation-popup.component';
+import { TrimValueDirective } from './shared/directives/trim-value.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
-    DeleteUserConfirmationPopupComponent
+    DeleteUserConfirmationPopupComponent,
+    TrimValueDirective
   ],
   imports: [
     BrowserModule,
@@ -30,9 +32,9 @@ import { DeleteUserConfirmationPopupComponent } from './components/delete-user-c
     ReactiveFormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-			enableHtml: true,
-			preventDuplicates: true
-		})
+      enableHtml: true,
+      preventDuplicates: true
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
