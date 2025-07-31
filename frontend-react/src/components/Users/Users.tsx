@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Button, Col, Form, Row, Spinner, Table } from 'react-bootstrap';
+import { Button, Col, Form, Row, Spinner, Table, Toast, ToastContainer } from 'react-bootstrap';
 import styles from './Users.module.css';
 import HttpCallsService from '../../Services/http-calls';
 import User from '../../Interfaces/User';
+import DeleteUserConfirmationPopup from '../DeleteUserConfirmationPopup/DeleteUserConfirmationPopup';
 
 const initialFormState: User = {
   id: '',
@@ -23,6 +24,24 @@ function Users() {
   const [addUpdateUserBtn, setAddUpdateUserBtn] = useState<'Add' | 'Update'>('Add');
   const [idToUpdateUser, setIdToUpdateUser] = useState<string>('');
   const [validated, setValidated] = useState(false);
+  const [showWithBG, setShowWithBG] = useState<{
+    show: boolean;
+    bg: string;
+    title: string;
+    msg: string;
+    userId?: string;
+  }>({ show: true, bg: 'info', title: '', msg: '' });
+
+
+  const [showConfirmationModal, setShowConfirmationModal] = useState<{
+    show: boolean;
+    userId?: any;
+  }>({ show: false });
+
+  const toggleShow = () => setShowWithBG({
+    ...showWithBG,
+    show: !showWithBG.show
+  });
 
   // Fetch users
   const loadUsers = useCallback(() => {
@@ -37,8 +56,13 @@ function Users() {
       .then((data: User[]) => {
         setUsers(data)
       })
-      .catch(error => {
-        console.error('Error fetching users:', error)
+      .catch(() => {
+        setShowWithBG({
+          show: true,
+          bg: 'danger',
+          title: 'Error',
+          msg: 'Failed to load users'
+        });
       })
       .finally(() => {
         setIsLoading(false)
@@ -86,10 +110,20 @@ function Users() {
     HttpCallsService.addUser(formData)
       .then(() => {
         clearForm();
-        console.log('User added successfully!');
+        setShowWithBG({
+          show: true,
+          bg: 'light',
+          title: 'Success',
+          msg: 'User added successfully'
+        });
       })
-      .catch(error => {
-        console.error('Error adding user:', error)
+      .catch(() => {
+        setShowWithBG({
+          show: true,
+          bg: 'danger',
+          title: 'Error',
+          msg: 'Error adding user'
+        });
       })
       .finally(() => {
         setIsLoading(false)
@@ -106,10 +140,21 @@ function Users() {
         clearForm();
         setAddUpdateUserBtn('Add');
         setIdToUpdateUser('');
-        console.log('User updated successfully!');
+        setShowWithBG({
+          show: true,
+          bg: 'light',
+          title: 'Success',
+          msg: 'is updated successfully',
+          userId: id
+        });
       })
-      .catch(error => {
-        console.error('Error updating user:', error)
+      .catch(() => {
+        setShowWithBG({
+          show: true,
+          bg: 'danger',
+          title: 'Error',
+          msg: 'Error updating user'
+        });
       })
       .finally(() => {
         setIsLoading(false)
@@ -121,10 +166,21 @@ function Users() {
     HttpCallsService.deleteUser(id)
       .then(() => {
         setUsers(prev => prev.filter(user => user.id !== id));
-        console.log('User deleted successfully!');
+        setShowWithBG({
+          show: true,
+          bg: 'light',
+          title: 'Success',
+          msg: 'is deleted successfully',
+          userId: id
+        });
       })
-      .catch(error => {
-        console.error('Error deleting user:', error)
+      .catch(() => {
+        setShowWithBG({
+          show: true,
+          bg: 'danger',
+          title: 'Error',
+          msg: 'Error deleting user'
+        });
       })
       .finally(() => {
         setIsLoading(false)
@@ -153,8 +209,34 @@ function Users() {
     setValidated(false);
   };
 
+  const handleBtnClick = (action: string) => {
+    if (action === 'Yes') {
+      deleteUser(showConfirmationModal.userId);
+    }
+    setShowConfirmationModal({ show: false });
+  };
+
+  const handleTrimOnBlur = (field: keyof User) => {
+    if (formData[field] && typeof formData[field] === 'string') {
+      setFormData(prev => ({
+        ...prev,
+        [field]: (prev[field] as string).trim(),
+      }));
+    }
+  };
+
   return (
     <div>
+      {showWithBG.msg && <ToastContainer
+        className="p-3" style={{ zIndex: 1 }} position={'top-end'}>
+        <Toast show={showWithBG.show} onClose={toggleShow} delay={1000} autohide bg={showWithBG.bg}>
+          <Toast.Header>
+            <strong className="me-auto">{showWithBG.title}</strong>
+          </Toast.Header>
+          <Toast.Body>{showWithBG.userId && <b>User Id - {showWithBG.userId}</b>} {showWithBG.msg}</Toast.Body>
+        </Toast>
+      </ToastContainer>}
+      <DeleteUserConfirmationPopup show={showConfirmationModal.show} onBtnClick={handleBtnClick}></DeleteUserConfirmationPopup>
       <Form noValidate validated={validated} onSubmit={addUpdateUserAction} className='m-3'>
         <Row className={styles.Users} data-testid='Users'>
           <Col md={3}></Col>
@@ -172,6 +254,7 @@ function Users() {
                 data-testid='firstName'
                 required
                 onChange={handleChange}
+                onBlur={() => handleTrimOnBlur('firstName')}
               />
               <Form.Control.Feedback type='invalid'>
                 First name is <strong>required</strong>
@@ -188,6 +271,7 @@ function Users() {
                 data-testid='lastName'
                 required
                 onChange={handleChange}
+                onBlur={() => handleTrimOnBlur('lastName')}
               />
               <Form.Control.Feedback type='invalid'>
                 Last name is <strong>required</strong>
@@ -206,7 +290,7 @@ function Users() {
               >
                 <option value=''>--Select--</option>
                 <option value='Male'>Male</option>
-                <option value='Memale'>Female</option>
+                <option value='Female'>Female</option>
               </Form.Select>
               <Form.Control.Feedback type='invalid'>
                 Gender is <strong>required</strong>
@@ -288,7 +372,10 @@ function Users() {
                       size='sm'
                       variant='outline-danger'
                       className={`${styles['m-left']} mx-2`}
-                      onClick={() => action(user.id)}
+                      onClick={() => setShowConfirmationModal({
+                        show: true,
+                        userId: user.id
+                      })}
                     >
                       Delete
                     </Button>

@@ -5,7 +5,7 @@ import DeleteUserConfirmationPopup from './DeleteUserConfirmationPopup';
 
 describe('<DeleteUserConfirmationPopup />', () => {
   test('it should mount', () => {
-    render(<DeleteUserConfirmationPopup />);
+    render(<DeleteUserConfirmationPopup show={true} onBtnClick={() => { }} />);
 
     const deleteUserConfirmationPopup = screen.getByTestId('DeleteUserConfirmationPopup');
 
