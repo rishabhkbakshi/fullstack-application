@@ -7,7 +7,9 @@ function DeleteUserConfirmationPopup(props: {
 }) {
   return (
     <>
-      <Modal show={props.show} onHide={() => props.onBtnClick('Cancel')} animation={false}>
+      <Modal show={props.show} onHide={() => props.onBtnClick('Cancel')} animation={false}
+        size="sm" aria-labelledby="contained-modal-title-vcenter"
+        centered>
         <Modal.Body>Are you sure, you want to delete this user ?</Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => props.onBtnClick('Yes')}>

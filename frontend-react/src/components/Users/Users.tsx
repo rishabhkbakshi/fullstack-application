@@ -328,7 +328,7 @@ function Users() {
         </div>
       </Form>
 
-      <div className='m-2'>
+      <div className={`m-2 ${styles['overflow-div']}`}>
         {isLoading && (
           <div className='d-flex justify-content-center my-3'>
             <Spinner animation="border" role="status">
