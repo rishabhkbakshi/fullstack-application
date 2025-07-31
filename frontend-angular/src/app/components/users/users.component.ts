@@ -44,7 +44,6 @@ export class UsersComponent implements OnInit {
     this.httpService.getUsers().then((res: User[]) => {
       this.users = res;
     }).catch((err) => {
-      console.error('Error loading users:', err);
       this.toastr.error('Failed to load users', 'Error');
     }).finally(() => {
       this.isLoading = false;
@@ -95,7 +94,7 @@ export class UsersComponent implements OnInit {
 
   updateUser(id: string) {
     this.httpService.updateUser(id, this.userForm.value).then(() => {
-      this.toastr.success(`<b>User Id - ${id}</b> updated successfully`, 'Success');
+      this.toastr.success(`<b>User Id - ${id}</b> is updated successfully`, 'Success');
       this.addUpdateUserBtn = 'Add';
 
       const index = this.users.findIndex(user => user.id === id);
