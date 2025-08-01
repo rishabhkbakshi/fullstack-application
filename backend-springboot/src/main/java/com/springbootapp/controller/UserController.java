@@ -49,7 +49,7 @@ public class UserController extends CommonMethods {
 	// Delete operation
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-	public String deleteUserEndPoint(@PathVariable String id) {
-		return deleteUser(id);
+	public void deleteUserEndPoint(@PathVariable String id) {
+		deleteUser(id);
 	}
 }

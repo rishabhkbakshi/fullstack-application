@@ -110,7 +110,7 @@ public class DBConnection {
 	}
 
 	// Code to execute delete query in the database
-	public static Long deleteUser(long id) throws Exception {
+	public static void deleteUser(long id) throws Exception {
 		DBConnection dbObj = new DBConnection();
 		Connection conn = null;
 		Statement stmt = null;
@@ -125,6 +125,5 @@ public class DBConnection {
 				conn.close();
 			}
 		}
-		return id;
 	}
 }

@@ -88,7 +88,7 @@ export class UsersComponent implements OnInit {
       this.toastr.error('Error adding user', 'Error');
     }).finally(() => {
       this.isLoading = false;
-      this.loadUsers()
+      this.loadUsers(); // Reload users after adding
     });
   }
 
