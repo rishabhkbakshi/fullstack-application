@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import com.springbootapp.models.User;
@@ -110,7 +111,7 @@ public class DBConnection {
 	}
 
 	// Code to execute delete query in the database
-	public static void deleteUser(long id) throws Exception {
+	public static Map<String, String> deleteUser(long id) throws Exception {
 		DBConnection dbObj = new DBConnection();
 		Connection conn = null;
 		Statement stmt = null;
@@ -125,5 +126,6 @@ public class DBConnection {
 				conn.close();
 			}
 		}
+		return Map.of("message", "User with id " + id + " deleted successfully");
 	}
 }

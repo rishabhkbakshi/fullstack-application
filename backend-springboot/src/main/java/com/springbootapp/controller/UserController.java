@@ -1,6 +1,7 @@
 package com.springbootapp.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +50,7 @@ public class UserController extends CommonMethods {
 	// Delete operation
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-	public void deleteUserEndPoint(@PathVariable String id) {
-		deleteUser(id);
+	public Map<String, String> deleteUserEndPoint(@PathVariable String id) {
+		return deleteUser(id);
 	}
 }

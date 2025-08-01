@@ -1,6 +1,7 @@
 package com.springbootapp.utility;
 
 import java.util.List;
+import java.util.Map;
 
 import com.springbootapp.dbops.DBConnection;
 import com.springbootapp.models.User;
@@ -36,12 +37,12 @@ public class CommonMethods extends DBConnection {
 		return user;
 	}
 
-	public String deleteUser(String id) {
+	public Map<String, String> deleteUser(String id) {
 		try {
 			deleteUser(Long.parseLong(id));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "User with id " + id + " deleted successfully";
+		return Map.of("message", "User with id " + id + " deleted successfully");
 	}
 }
