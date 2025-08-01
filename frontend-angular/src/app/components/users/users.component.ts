@@ -111,6 +111,7 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(id: string) {
+    this.isLoading = true;
     let dialogRef = this.dialog.open(DeleteUserConfirmationPopupComponent, {
       width: '250px',
       disableClose: true,
@@ -121,6 +122,7 @@ export class UsersComponent implements OnInit {
         this.users = this.users.filter(user => user.id !== id); // Remove user from the list
       }
       this.clearForm();
+      this.isLoading = false;
     });
   }
 

@@ -35,13 +35,11 @@ export class DeleteUserConfirmationPopupComponent implements OnInit {
   onConfirmClick() {
     const userId: number = this.data.id;
     this.httpService.deleteUser(userId).then((res: any) => {
-      this.data.isLoading = false;
       this.closeModal({
         actionCalled: 'Ok'
       });
       this.toastr.success(`<b>User Id - ${userId}</b> deleted successfully`, 'Success');
     }).catch(() => {
-      this.data.isLoading = false;
       this.closeModal({
         actionCalled: 'Cancel'
       });
