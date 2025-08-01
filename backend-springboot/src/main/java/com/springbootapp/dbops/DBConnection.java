@@ -66,10 +66,11 @@ public class DBConnection {
 	}
 
 	// Code to execute insert query in the database
-	public static void insertUser(String firstName, String lastName, String gender) throws Exception {
+	public static User insertUser(String firstName, String lastName, String gender) throws Exception {
 		DBConnection dbObj = new DBConnection();
 		Connection conn = null;
 		Statement stmt = null;
+
 		try {
 			conn = dbObj.getConnection();
 			stmt = (Statement) conn.createStatement();
@@ -82,10 +83,11 @@ public class DBConnection {
 				conn.close();
 			}
 		}
+		return new User(0, firstName, lastName, gender);
 	}
 
 	// Code to execute update query in the database
-	public static void updateUser(String firstName, String lastName, String gender, long id) throws Exception {
+	public static User updateUser(String firstName, String lastName, String gender, long id) throws Exception {
 		DBConnection dbObj = new DBConnection();
 		Connection conn = null;
 		PreparedStatement pStmt = null;
@@ -104,10 +106,11 @@ public class DBConnection {
 				conn.close();
 			}
 		}
+		return new User(id, firstName, lastName, gender);
 	}
 
 	// Code to execute delete query in the database
-	public static void deleteUser(long id) throws Exception {
+	public static Long deleteUser(long id) throws Exception {
 		DBConnection dbObj = new DBConnection();
 		Connection conn = null;
 		Statement stmt = null;
@@ -122,5 +125,6 @@ public class DBConnection {
 				conn.close();
 			}
 		}
+		return id;
 	}
 }

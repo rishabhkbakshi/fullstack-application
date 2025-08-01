@@ -18,29 +18,30 @@ public class CommonMethods extends DBConnection {
 		return lstUser;
 	}
 
-	public void addUser(User user) {
+	public User addUser(User user) {
 		try {
 			insertUser(user.firstName(), user.lastName(), user.gender());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return user;
 	}
 
-	public void updateUser(String id, User user) {
+	public User updateUser(String id, User user) {
 		try {
 			updateUser(user.firstName(), user.lastName(), user.gender(), Long.parseLong(id));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		return user;
 	}
 
-	public void deleteUser(String id) {
+	public String deleteUser(String id) {
 		try {
 			deleteUser(Long.parseLong(id));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		return "User with id " + id + " deleted successfully";
 	}
 }

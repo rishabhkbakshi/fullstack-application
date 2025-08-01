@@ -19,10 +19,10 @@ import com.springbootapp.utility.CommonMethods;
 public class UserController extends CommonMethods {
 
 	/*
-	 *  @CrossOrigin is used to overcome the CORS issue 
-	 *  When user call the api from Front-end
+	 * @CrossOrigin is used to overcome the CORS issue
+	 * When user call the api from Front-end
 	 */
-	
+
 	// Select operation
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@GetMapping("/users")
@@ -35,21 +35,21 @@ public class UserController extends CommonMethods {
 	// Insert operation
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
-	public void addUserEndPoint(@RequestBody User user) {
-		addUser(user);
+	public User addUserEndPoint(@RequestBody User user) {
+		return addUser(user);
 	}
 
 	// Update operation
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
-	public void updateUserEndPoint(@PathVariable String id, @RequestBody User user) {
-		updateUser(id, user);
+	public User updateUserEndPoint(@PathVariable String id, @RequestBody User user) {
+		return updateUser(id, user);
 	}
 
 	// Delete operation
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-	public void deleteUserEndPoint(@PathVariable String id) {
-		deleteUser(id);
+	public String deleteUserEndPoint(@PathVariable String id) {
+		return deleteUser(id);
 	}
 }
