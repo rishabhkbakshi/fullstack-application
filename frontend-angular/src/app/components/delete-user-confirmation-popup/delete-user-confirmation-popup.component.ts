@@ -10,7 +10,7 @@ import { HttpCallsService } from '../../services/http-calls.service';
 })
 export class DeleteUserConfirmationPopupComponent implements OnInit {
 
-  message: string = 'Are you sure?';
+  message: string = 'Are you sure, you want to delete this user ?';
   confirmButtonText: string = 'Yes';
   cancelButtonText: string = 'Cancel';
 

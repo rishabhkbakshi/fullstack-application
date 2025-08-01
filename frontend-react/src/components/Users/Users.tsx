@@ -32,7 +32,6 @@ function Users() {
     userId?: string;
   }>({ show: true, bg: 'info', title: '', msg: '' });
 
-
   const [showConfirmationModal, setShowConfirmationModal] = useState<{
     show: boolean;
     userId?: any;
@@ -187,19 +186,15 @@ function Users() {
       });
   };
 
-  const action = (id: string, user?: User) => {
-    if (user) {
-      setAddUpdateUserBtn('Update');
-      setIdToUpdateUser(id);
-      setFormData({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        gender: user.gender,
-      });
-    } else {
-      deleteUser(id);
-    }
+  const onUpdateAction = (id: string, user: User) => {
+    setAddUpdateUserBtn('Update');
+    setIdToUpdateUser(id);
+    setFormData({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      gender: user.gender,
+    });
   };
 
   const clearForm = () => {
@@ -363,7 +358,7 @@ function Users() {
                       type='button'
                       size='sm'
                       variant='outline-primary'
-                      onClick={() => action(user.id, user)}
+                      onClick={() => onUpdateAction(user.id, user)}
                     >
                       Update
                     </Button>
