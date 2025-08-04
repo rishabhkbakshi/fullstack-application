@@ -322,15 +322,14 @@ function Users() {
           </Col>
         </div>
       </Form>
-
+      {isLoading && (
+        <div className='d-flex justify-content-center my-3'>
+          <Spinner animation="border" role="status">
+            <span className='visually-hidden'>Loading...</span>
+          </Spinner>
+        </div>
+      )}
       <div className={`m-2 ${styles['overflow-div']}`}>
-        {isLoading && (
-          <div className='d-flex justify-content-center my-3'>
-            <Spinner animation="border" role="status">
-              <span className='visually-hidden'>Loading...</span>
-            </Spinner>
-          </div>
-        )}
         <Table className='table table-bordered'>
           <thead>
             <tr>
