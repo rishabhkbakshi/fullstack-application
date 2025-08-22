@@ -1,6 +1,6 @@
 # fullstack-application
 
-This is a demo full-stack CRUD application using **Angular**/**React** (Frontend), **Spring Boot** (Backend), and **MySQL** (Database).
+This application demonstrates fundamental CRUD operations on a database table, leveraging **Angular** and **React** for the frontend, **Spring Boot** for the backend, and MySQL for data storage. It includes both Angular and React frontend implementations.
 
 ---
 
